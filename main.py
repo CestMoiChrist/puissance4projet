@@ -33,7 +33,44 @@ class Piont(object):
 class Terrain(Canvas):
 
     def callback(self, message):
-        print(message)
+        print(len(message))
+        handle = message.split()
+        if len(handle) == 2:
+            print("handle : " + handle[1])
+
+            col = int((int(handle[1])/71))
+            lig = 0
+
+            lig = 0
+            while lig < len(self.p):
+                if self.p[0][col].coul == "red" or self.p[0][0].coul == "yellow":
+                    break
+
+                if self.p[lig][col].coul == "red" or self.p[lig][col].coul == "yellow":
+                    self.p[lig-1][col].changeCouleur(self.coul)
+                    break
+
+                elif lig == len(self.p)-1:
+                    self.p[lig][col].changeCouleur(self.coul)
+                    break
+
+            if self.p[lig][col].coul != "red" and self.p[lig][col].coul != "yellow":
+                lig += 1
+
+            if self.joueur == 1:
+                self.joueur = 2
+                info.t.config(text="Tour de rouge")
+                self.coul = "red"
+
+            elif self.joueur == 2:
+                self.joueur = 1
+                info.t.config(text="Tour de jaune")
+                self.coul = "yellow"
+
+            self.Horizontal()
+            self.Vertical()
+            self.Diagonal1()
+            self.Diagonal2()
 
     def __init__(self, master=None):
         Canvas.__init__(self)
@@ -61,40 +98,6 @@ class Terrain(Canvas):
     def detCol(self, event):
         if self.perm:
             self.client.send(str(event.x))
-
-            col = int(event.x/71)
-            lig = 0
-
-            lig = 0
-            while lig < len(self.p):
-                if self.p[0][col].coul == "red" or self.p[0][0].coul == "yellow":
-                    break
-
-                if self.p[lig][col].coul == "red" or self.p[lig][col].coul == "yellow":
-                    self.p[lig-1][col].changeCouleur(self.coul)
-                    break
-
-                elif lig == len(self.p)-1:
-                    self.p[lig][col].changeCouleur(self.coul)
-                    break
-
-                if self.p[lig][col].coul != "red" and self.p[lig][col].coul != "yellow":
-                    lig += 1
-
-            if self.joueur == 1:
-                self.joueur = 2
-                info.t.config(text="Tour de rouge")
-                self.coul = "red"
-
-            elif self.joueur == 2:
-                self.joueur = 1
-                info.t.config(text="Tour de jaune")
-                self.coul = "yellow"
-
-            self.Horizontal()
-            self.Vertical()
-            self.Diagonal1()
-            self.Diagonal2()
 
     def Horizontal(self):
         i = 0
@@ -184,7 +187,6 @@ def rein():
     t.grid(row=1, column=0)
 
 
-Button(root, text="RÃ©initialiser", command=rein).grid(
-    row=2, column=0, pady=30)
+Button(root, text="Réinitialiser", command=rein).grid(row=2, column=0, pady=30)
 
 root.mainloop()
